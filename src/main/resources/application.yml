@@ -1,0 +1,14 @@
+server:
+    port: 9090
+spring:
+    datasource:
+        password: 1234
+        url: jdbc:postgresql://localhost:5432/restaurant
+        username: postgres
+    jpa:
+        hibernate:
+            ddl-auto: create
+        show-sql: true
+app:
+    jwt:
+        secret: Gulumkan&Java12
