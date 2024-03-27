@@ -2,6 +2,7 @@ package peaksoft.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class Category {
     private Long id;
     private String name;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<SubCategory> subCategories = new ArrayList<>();
 
     @ManyToOne(cascade = {DETACH})

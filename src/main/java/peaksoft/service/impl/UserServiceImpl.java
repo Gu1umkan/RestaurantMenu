@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import peaksoft.config.jwt.JwtService;
@@ -145,15 +146,17 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public SimpleResponse assign(Long claimId, Principal principal) {
+        User currentUser = getCurrentUser(principal);
 
         Claim claim = claimRepo.getClaimById(claimId);
-        User currentUser = getCurrentUser(principal);
+
         checkApplication(claim);
         Restaurant restaurant = claim.getRestaurant();
 
         if (currentUser.getRole().equals(Role.ADMIN)
                 && restaurant.getUsers().contains(currentUser)
                 && restaurant.getUsers().size() < 15) {
+
             User user = new User();
             user.setEmail(claim.getEmail());
             user.setPassword(claim.getPassword());
@@ -164,6 +167,8 @@ public class UserServiceImpl implements UserService {
             user.setLastName(claim.getLastName());
             user.setRole(claim.getRole());
             user.setRestaurant(claim.getRestaurant());
+
+            restaurant.setNumberOfEmployees(restaurant.getUsers().size());
             userRepository.save(user);
             claimRepo.delete(claim);
             return SimpleResponse.builder()
@@ -227,7 +232,13 @@ public class UserServiceImpl implements UserService {
     public SimpleResponse removeUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new NotFoundException("User with id:" + userId + " not found"));
+
+        Restaurant restaurant = user.getRestaurant();
+
         userRepository.deleteById(user.getId());
+
+        restaurant.setNumberOfEmployees(restaurant.getUsers().size());
+
         return SimpleResponse.builder()
                 .httpStatus(HttpStatus.OK)
                 .message("User with email:" + user.getEmail() + " successfully deleted!")
@@ -247,6 +258,38 @@ public class UserServiceImpl implements UserService {
                 .experience(user.getExperience())
                 .phoneNumber(user.getPhoneNumber())
                 .role(user.getRole())
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public SimpleResponse update(Long userId, ClaimRequest claimRequest) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepository.getByEmail(email);
+
+        if (currentUser.getRole().equals(Role.ADMIN) || currentUser.getId().equals(userId)) {
+            User updatedUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User with id:" + userId + "not found!"));
+
+            if (userRepository.existsByEmail(claimRequest.getEmail()) && !updatedUser.getEmail().equals(claimRequest.getEmail())) {
+                throw new AlreadyExistsException(String.format("User with email %s already exists", claimRequest.getEmail()));
+            } else {
+                userRepository.existsByEmail(claimRequest.getEmail());
+                updatedUser.setLastName(claimRequest.getLastName());
+                updatedUser.setFirstName(claimRequest.getFirstName());
+                updatedUser.setRole(claimRequest.getRole());
+                updatedUser.setPhoneNumber(claimRequest.getPhoneNumber());
+                updatedUser.setPassword(passwordEncoder.encode(claimRequest.getPassword()));
+                updatedUser.setEmail(claimRequest.getEmail());
+                updatedUser.setExperience(claimRequest.getExperience());
+                return SimpleResponse.builder()
+                        .httpStatus(HttpStatus.OK)
+                        .message("Successfully updated!")
+                        .build();
+            }
+        }
+        return SimpleResponse.builder()
+                .httpStatus(HttpStatus.NOT_MODIFIED)
+                .message("error")
                 .build();
     }
 

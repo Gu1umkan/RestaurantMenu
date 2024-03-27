@@ -1,8 +1,10 @@
 package peaksoft.api;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+import peaksoft.dto.request.ClaimRequest;
 import peaksoft.dto.response.PaginationUser;
 import peaksoft.dto.response.SimpleResponse;
 import peaksoft.dto.response.UserResponse;
@@ -35,6 +37,12 @@ public class UserApi {
     @GetMapping ("/assign/{claimId}")
     public SimpleResponse  assign(@PathVariable Long claimId, Principal principal){
      return userService.assign(claimId, principal);
+    }
+
+    @Secured("ADMIN,WAITER")
+    @PutMapping("/update/{userId}")
+    public SimpleResponse update(@PathVariable Long userId, @RequestBody @Valid ClaimRequest claimRequest){
+        return userService.update(userId,claimRequest);
     }
 
     @Secured("ADMIN")

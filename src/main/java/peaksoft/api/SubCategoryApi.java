@@ -26,7 +26,7 @@ public class SubCategoryApi {
 
     @Secured({"ADMIN","CHEF"})
     @PutMapping("/updateSubCat/{subCatId}")
-    public SimpleResponse update(@PathVariable Long subCatId, @RequestBody @Valid SubCategoryRequest subCategoryRequest){
+    public SimpleResponse update(@PathVariable Long subCatId, @RequestBody SubCategoryRequest subCategoryRequest){
         return subCategoryService.updateSubCat(subCatId, subCategoryRequest);
     }
 

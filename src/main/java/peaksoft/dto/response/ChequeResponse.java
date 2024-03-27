@@ -1,11 +1,7 @@
 package peaksoft.dto.response;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.ManyToOne;
-import lombok.Builder;
-import peaksoft.entity.User;
 
-import java.math.BigDecimal;
+import lombok.Builder;
 import java.time.LocalDate;
 @Builder
 public record ChequeResponse(

@@ -17,6 +17,7 @@ public interface UserService {
     SimpleResponse assign(Long claimId, Principal principal);
 
     PaginationUser findALlUsers(int page, int size, Principal principal);
+    SimpleResponse update(Long userId, ClaimRequest claimRequest);
     PaginationUser findALlClaims(int page, int size, Principal principal);
 
     SimpleResponse deleteClaim(Long claimId, Principal principal);

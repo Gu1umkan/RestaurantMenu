@@ -5,6 +5,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import peaksoft.dto.request.ChequeRequest;
 import peaksoft.dto.response.GetCheckResponse;
+import peaksoft.dto.response.RestaurantCheckResponse;
 import peaksoft.dto.response.SimpleResponse;
 import peaksoft.service.ChequeService;
 
@@ -67,7 +68,7 @@ public class ChequeApi {
 
     @Secured("ADMIN")
     @GetMapping("/avgRest")
-    public String avgRest(){
+    public RestaurantCheckResponse avgRest(){
         return chequeService.avgRest();
     }
 

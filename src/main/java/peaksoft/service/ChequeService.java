@@ -2,6 +2,7 @@ package peaksoft.service;
 
 import peaksoft.dto.request.ChequeRequest;
 import peaksoft.dto.response.GetCheckResponse;
+import peaksoft.dto.response.RestaurantCheckResponse;
 import peaksoft.dto.response.SimpleResponse;
 
 import java.time.LocalDate;
@@ -22,7 +23,7 @@ public interface ChequeService {
 
     String getChequeByUserIdAndDate(Long userId, LocalDate localDate);
 
-    String avgRest();
+    RestaurantCheckResponse avgRest();
 
     SimpleResponse deleteMenuOfCheck(Long checkId,ChequeRequest chequeRequest);
 }
