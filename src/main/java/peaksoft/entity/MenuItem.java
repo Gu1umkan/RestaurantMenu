@@ -33,4 +33,7 @@ public class MenuItem {
 
     @OneToOne( cascade = {REMOVE, MERGE})
     private StopList stopList;
+
+    @ManyToMany(mappedBy = "menuItems",cascade = REMOVE)
+    private List<Cheque> cheques;
 }

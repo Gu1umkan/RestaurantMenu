@@ -28,7 +28,7 @@ public class Cheque {
     @ManyToOne(cascade = CascadeType.DETACH)
     private User user;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.DETACH)
     private List<MenuItem> menuItems = new ArrayList<>();
 
 

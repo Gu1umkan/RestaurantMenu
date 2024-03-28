@@ -40,34 +40,34 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    @PostConstruct
-    private void saveProgrammer() {
-        userRepository.save(
-                User.builder()
-                        .email("programmer@gmail.com")
-                        .password(passwordEncoder.encode("programmer"))
-                        .role(Role.PROGRAMMER)
-                        .build()
-        );
-
-        Restaurant restaurant = restaurantRepo.save(
-                Restaurant.builder()
-                        .name("Java-12")
-                        .location("Bishkek Jal-29")
-                        .restType(RestType.NATIONAL)
-                        .build()
-        );
-        User user = userRepository.save(
-                User.builder()
-                        .role(Role.ADMIN)
-                        .email("admin@gmail.com")
-                        .password(passwordEncoder.encode("admin"))
-                        .restaurant(restaurant)
-                        .build()
-
-        );
-        restaurant.addUser(user);
-    }
+//    @PostConstruct
+//    private void saveProgrammer() {
+//        userRepository.save(
+//                User.builder()
+//                        .email("programmer@gmail.com")
+//                        .password(passwordEncoder.encode("programmer"))
+//                        .role(Role.PROGRAMMER)
+//                        .build()
+//        );
+//
+//        Restaurant restaurant = restaurantRepo.save(
+//                Restaurant.builder()
+//                        .name("Java-12")
+//                        .location("Bishkek Jal-29")
+//                        .restType(RestType.NATIONAL)
+//                        .build()
+//        );
+//        User user = userRepository.save(
+//                User.builder()
+//                        .role(Role.ADMIN)
+//                        .email("admin@gmail.com")
+//                        .password(passwordEncoder.encode("admin"))
+//                        .restaurant(restaurant)
+//                        .build()
+//
+//        );
+//        restaurant.addUser(user);
+//    }
 
     private User getCurrentUser(Principal principal) {
         String email = principal.getName();

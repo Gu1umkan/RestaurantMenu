@@ -67,7 +67,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     @Override @Transactional
     public SimpleResponse deleteMenuById(Long menuId) {
         getCurrentUser();
-        MenuItem menuItem = menuItemRepo.findById(menuId).orElseThrow(() -> new RuntimeException("Not found menu"));
+        MenuItem menuItem = menuItemRepo.findById(menuId).orElseThrow(() -> new NotFoundException("Not found menu"));
         menuItemRepo.delete(menuItem);
         return SimpleResponse.builder()
                 .httpStatus(HttpStatus.OK)

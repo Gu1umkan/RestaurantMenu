@@ -22,7 +22,7 @@ public class Category {
     private Long id;
     private String name;
 
-    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "category",cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<SubCategory> subCategories = new ArrayList<>();
 
     @ManyToOne(cascade = {DETACH})
